@@ -1,0 +1,67 @@
+@host = http://localhost:8080
+@token = {{login.response.body.token}}
+
+### Health
+GET {{host}}/health
+
+### Register user
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "email": "newuser@example.com",
+  "password": "NewUserPass123!",
+  "first_name": "New",
+  "last_name": "User"
+}
+
+### Login
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "AdminPass123!"
+}
+
+### Me (requires token)
+GET {{host}}/auth/me
+Authorization: Bearer {{token}}
+
+### List users (admin only)
+GET {{host}}/users?limit=10&offset=0
+Authorization: Bearer {{token}}
+
+### Get user by id
+GET {{host}}/users/{{userId}}
+Authorization: Bearer {{token}}
+
+### Update user
+PUT {{host}}/users/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "updateduser",
+  "email": "updated@example.com",
+  "first_name": "Updated",
+  "last_name": "User",
+  "phone_number": "1234567890",
+  "address": "123 Street",
+  "role": "user"
+}
+
+### Update password
+POST {{host}}/users/{{userId}}/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "password": "NewSecret123!"
+}
+
+### Delete user (admin only)
+DELETE {{host}}/users/{{userId}}
+Authorization: Bearer {{token}}
